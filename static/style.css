@@ -19,6 +19,15 @@ body {
     --primary: #581B98;
 }
 
+
+
+.container{
+    background-image: url('/static/images/micheile-henderson-SoT4-mZhyhE-unsplash.jpg');
+    background-size: cover;
+    background-position: center; 
+    padding: 20px; 
+}
+
 /* CHATBOX
 =============== */
 .chatbox {
