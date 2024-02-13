@@ -63,6 +63,12 @@ class Chatbox {
             this.updateChatText(chatbox)
             textField.value=''
         })
+        .catch(error => {
+            console.error('Error:', error);
+            this.updateChatText(chatbox)
+            textField.value=''
+        });
+    };
 
 
     updateChatText(chatbox){
