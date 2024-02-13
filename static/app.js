@@ -38,4 +38,52 @@ class Chatbox {
         }
     }
 
+    onSendButton(chatbox){
+        var textField = chatbox.querySelector('input');
+        let text1 = textField.value
+        if (text1==''){
+            return;
+        }
+
+        let msg1 = {name:'User', message: text1}
+        this.messages.push(msg1);
+
+
+        fetch('/predict',{
+            method: 'POST',
+            body:JSON.stringify({message:text1}),
+            mode:'cors',
+            headers:{'Content-type':'application/json'},
+        })
+        .then(r=>r.json())
+        .then(data=>{
+            console.log('Result from Python function:', data.answer);
+            let msg2 = {name: 'Flint', message: data.answer};
+            this.messages.push(msg2);
+            this.updateChatText(chatbox)
+            textField.value=''
+        })
+
+
+    updateChatText(chatbox){
+        var html='';
+        this.messages.slice().reverse().forEach(function(item,index){
+            if (item.name==='Flint'){
+                html+='<div class="messages__item messages__item--visitor">' + item.message + '</div>'
+            }
+            else{
+                html+='<div class="messages__item messages__item--operator">' + item.message + '</div>'
+            }
+        });
+
+        const chatmessage = chatbox.querySelector('.chatbox__messages');
+        chatmessage.innerHTML=html;
+    }
+
+
+
 }
+
+
+const chatbot= new Chatbox();
+chatbot.display()
