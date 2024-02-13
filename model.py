@@ -66,7 +66,7 @@ def final_result(query):
     return response
 
 
-input_query=input('Introduce your query: ')
-answer=final_result(input_query)
+#input_query=input('Introduce your query: ')
+#answer=final_result(input_query)
 #We take the 'result' value as the answer of the chatbot
-print(answer['result'])
+#print(answer['result'])
