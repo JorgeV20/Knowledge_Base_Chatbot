@@ -21,11 +21,27 @@ body {
 
 
 
-.container{
-    background-image: url('/static/images/micheile-henderson-SoT4-mZhyhE-unsplash.jpg');
+.header_text{
+    background-image: url('/static/images/kelly-sikkema-wgcUx0kR1ps-unsplash.jpg');
     background-size: cover;
     background-position: center; 
-    padding: 20px; 
+    padding: 50px; 
+    width: 100%;
+    color: white; /* Set text color to white */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Apply a shadow to the text */
+}
+
+
+footer {
+    background-color: black;
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 18px;
+}
+
+footer a {
+    color: white;
 }
 
 /* CHATBOX
