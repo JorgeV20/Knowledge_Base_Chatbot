@@ -132,12 +132,12 @@ footer a {
 
 /* HEADER */
 .chatbox__header {
-    background: var(--primaryGradient);
+    background: grey;/*var(--primaryGradient);*/
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 15px 20px;
+    padding: 10px 10px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     box-shadow: var(--primaryBoxShadow);
@@ -150,11 +150,13 @@ footer a {
 .chatbox__heading--header {
     font-size: 1.2rem;
     color: white;
+    margin: 0px;
 }
 
 .chatbox__description--header {
     font-size: .9rem;
     color: white;
+    margin: 0px;
 }
 
 /* Messages */
@@ -191,10 +193,10 @@ footer a {
     align-items: center;
     justify-content: space-between;
     padding: 20px 20px;
-    background: var(--secondaryGradient);
+    background: linear-gradient(to bottom right, grey, #f0f0f0)/* var(--secondaryGradient) */;
     box-shadow: var(--secondaryBoxShadow);
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
+    /*border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;*/
     margin-top: 20px;
 }
 
@@ -208,6 +210,7 @@ footer a {
 
 .chatbox__send--footer {
     color: white;
+    background:rgb(82, 77, 77);
 }
 
 .chatbox__button button,
