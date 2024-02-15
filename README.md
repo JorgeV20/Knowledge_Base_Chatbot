@@ -7,7 +7,7 @@ FinanceBot Knowledge Base Chatbot is a tool designed to provide instant access t
 - [`app.py`](app.py): Execute FinanceBot in a Flask server.
 - [`model.py`](model.py): The file executes the chatbot instructions in order to generate a response according to user's input.
 - [`ingest.py`](ingest.py): The file generates the vectorstore based on the pdf source.
-- [`vectoresctore/db_faiss`](vectoresctore/db_faiss): Contains the vectostore database using FAISS..
+- [`vectoresctore/db_faiss`](vectoresctore/db_faiss): Contains the vectostore database using FAISS.
 - [`templates`](templates): The folder contains the html file of the interface application.
 - [`statis`](static): The folder contains css, js, and images files used in the application.
 - [`data`](data): The folder contains the pdf used to create the knowledge base.
