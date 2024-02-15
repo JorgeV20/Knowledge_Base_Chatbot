@@ -2,6 +2,8 @@
 
 FinanceBot Knowledge Base Chatbot is a tool designed to provide instant access to financial information and expertise. Leveraging state-of-the-art natural language processing (NLP) algorithms, FinanceBot extracts valuable insights and knowledge from a comprehensive finance PDF resource, transforming it into an interactive chatbot experience. FinanceBot was built using Llama2 - 7B, Langchain, FAISS, and Flask as foundational technologies.
 
+![FinanceBot](./FinanceBot.jpg)
+
 ## Repository Structure
 - [`README.md`](README.md): The file contais the description of the project.
 - [`app.py`](app.py): Execute FinanceBot in a Flask server.
