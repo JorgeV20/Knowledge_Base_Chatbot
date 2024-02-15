@@ -11,7 +11,7 @@ FinanceBot Knowledge Base Chatbot is a tool designed to provide instant access t
 - [`ingest.py`](ingest.py): The file generates the vectorstore based on the pdf source.
 - [`vectoresctore/db_faiss`](vectoresctore/db_faiss): Contains the vectostore database using FAISS.
 - [`templates`](templates): The folder contains the html file of the interface application.
-- [`static`](static): The folder contains css, js, and images files used in the application.
+- [`static`](static): The folder contains the css, js, and images files used in the application.
 - [`data`](data): The folder contains the pdf used to create the knowledge base.
 
 ## Source
