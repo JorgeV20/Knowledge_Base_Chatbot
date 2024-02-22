@@ -15,7 +15,10 @@ FinanceBot Knowledge Base Chatbot is a tool designed to provide instant access t
 - [`data`](data): The folder contains the pdf used to create the knowledge base.
 
 ## Source
-The pdf source used is 'The Basics of Finance An Introduction to Financial Markets, Business Finance, and Portfolio Management'.
+The pdf sources are:
+- The Basics of Finance An Introduction to Financial Markets, Business Finance, and Portfolio Management
+- The Alchemy of Finance, Reading the Mind of the Market
+- The Nature of Investing
 
 ## Future work
 - Add features such a pdf loader.
