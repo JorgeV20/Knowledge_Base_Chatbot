@@ -125,6 +125,7 @@ with col2:
     
     
     st.header("Chatbot💁")
+    st.write(DB_FAISS_PATH)
     user_question = st.text_input("Ask a Question from Finance", key="user_question")
     if user_question:
         response=final_result(user_question)
