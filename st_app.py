@@ -13,7 +13,7 @@ import yfinance as yf
 from prophet import Prophet
 import pandas as pd
 from datetime import date
-from prophet.plot import plot_plotly
+#from prophet.plot import plot_plotly
 from plotly import graph_objs as go
 
 st.title('🦜🔗 Flint, your FinanceBot')
@@ -51,7 +51,8 @@ with col1:
     st.write(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
 
     st.write(f'Forecast plot for 1 year')
-    fig1 = plot_plotly(m, forecast)
+    #fig1 = plot_plotly(m, forecast)
+    fig1 = m.plot(forecast)
     st.plotly_chart(fig1)
 
 
