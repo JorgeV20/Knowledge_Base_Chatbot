@@ -52,8 +52,8 @@ with col1:
 
     st.write(f'Forecast plot for 1 year')
     #fig1 = plot_plotly(m, forecast)
-    fig1 = m.plot(forecast)
-    st.plotly_chart(fig1)
+    #fig1 = m.plot(forecast)
+    #st.plotly_chart(fig1)
 
 
 
