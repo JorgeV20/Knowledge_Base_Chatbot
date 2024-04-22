@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 #chatbot
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
@@ -15,6 +16,8 @@ import pandas as pd
 from datetime import date
 #from prophet.plot import plot_plotly
 from plotly import graph_objs as go
+
+local_path=os.getcwd()
 
 st.title('🦜🔗 Flint, your FinanceBot')
 st.markdown("""
@@ -61,7 +64,7 @@ with col2:
     
     st.header("Ask to Flint")
 
-    DB_FAISS_PATH = './vectorstore/db_faiss'
+    DB_FAISS_PATH = local_path +'/vectorstore/db_faiss'
 
     custom_prompt_template = """Use the following pieces of information to answer the user's question.
     If you don't know the answer, just say that you don't know, don't try to make up an answer.
