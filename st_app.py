@@ -18,7 +18,7 @@ from plotly import graph_objs as go
 
 st.title('🦜🔗 Flint, your FinanceBot')
 st.markdown("""
-## Finance Bot: Get instant insights from your Documents
+## Finance Bot: Get instant insights from Finance
 
 This chatbot is built using the Retrieval-Augmented Generation (RAG) framework
             
