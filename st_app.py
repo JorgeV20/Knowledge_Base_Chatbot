@@ -20,7 +20,7 @@ from plotly import graph_objs as go
 
 local_path=os.getcwd()
 
-@st.cache
+@st.cache_resource
 def load_llm():
         # Load the locally downloaded model here
         llm = CTransformers(
