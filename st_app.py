@@ -87,7 +87,7 @@ This chatbot is built using the Retrieval-Augmented Generation (RAG) framework
 
 #with col2:
     
-st.header("Ask to Flint")
+#st.header("Ask to Flint")
 
     #DB_FAISS_PATH = os.path.join(local_path, 'vectorstore_docs/db_faiss')
 
@@ -141,7 +141,7 @@ def final_result(query,llm,db,embeddings):
         return response
     
     
-st.header("Chatbot💁")
+st.header("Ask to Flint 🤖")
     #st.write(DB_FAISS_PATH)
     #filenames = os.listdir(DB_FAISS_PATH)
     #for file in filenames:
