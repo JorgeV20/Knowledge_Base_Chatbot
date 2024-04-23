@@ -58,12 +58,6 @@ with col1:
     #fig1 = plot_plotly(m, forecast)
     #fig1 = m.plot(forecast)
     #st.plotly_chart(fig1)
-    class db():
-        print('Starting create vector db')
-        create_vector_db()
-        print('vector db done!')
-
-    db()
 
 
 
@@ -115,6 +109,11 @@ with col2:
 
     #QA Model Function
     def qa_bot():
+        #creating vectordb
+        print('Starting create vector db')
+        create_vector_db()
+        print('vector db done!')
+
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
         db = FAISS.load_local(DB_FAISS_PATH, embeddings)
