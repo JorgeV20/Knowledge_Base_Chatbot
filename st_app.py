@@ -40,8 +40,8 @@ def get_embedding_model():
                                         model_kwargs={'device':'cpu'})
     return embeddings
 
-DATA_PATH='docs/'
-DB_FAISS_PATH='vectorstore_docs/db_faiss'
+DATA_PATH='data/'
+DB_FAISS_PATH='vectorstore/db_faiss'
 
 #Create vector database
 @st.cache_resource
