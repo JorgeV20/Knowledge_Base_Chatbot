@@ -180,4 +180,16 @@ with col2:
     if user_question:
         response=final_result(user_question,llm,db,embeddings)
         st.write("Reply: ", response['result'])
+    
+    with st.sidebar:
+        st.header("Chatbot💁")
+    #st.write(DB_FAISS_PATH)
+    #filenames = os.listdir(DB_FAISS_PATH)
+    #for file in filenames:
+       #st.write(file)
+
+    user_question = st.text_input("Ask a Question from Finance", key="user_question")
+    if user_question:
+        response=final_result(user_question,llm,db,embeddings)
+        st.write("Reply: ", response['result'])
         
