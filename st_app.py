@@ -97,6 +97,7 @@ with col2:
         return qa_chain
 
     #Loading the model
+    @st.cache_resource
     def load_llm():
         # Load the locally downloaded model here
         llm = CTransformers(
@@ -108,6 +109,7 @@ with col2:
         return llm
 
     #QA Model Function
+    @st.cache_resource
     def qa_bot():
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
@@ -122,9 +124,9 @@ with col2:
     #output function
     def final_result(query):
         #creating vectordb
-        print('Starting create vector db')
-        create_vector_db()
-        print('vector db done!')
+        #print('Starting create vector db')
+        #create_vector_db()
+        #print('vector db done!')
         qa_result = qa_bot()
         response = qa_result.invoke({'query': query})
         return response
