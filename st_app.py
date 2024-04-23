@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+from ingest import create_vector_db
 
 #chatbot
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
@@ -18,6 +19,7 @@ from datetime import date
 from plotly import graph_objs as go
 
 local_path=os.getcwd()
+create_vector_db()
 
 st.title('🦜🔗 Flint, your FinanceBot')
 st.markdown("""
