@@ -10,6 +10,9 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.llms import CTransformers
 from langchain.chains import RetrievalQA
 
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+
 #Forecast
 import yfinance as yf
 from prophet import Prophet
@@ -29,7 +32,35 @@ def load_llm():
             max_new_tokens = 512,
             temperature = 0.5
         )
-        return llm    
+        return llm 
+
+DATA_PATH='docs/'
+DB_FAISS_PATH='vectorstore_docs/db_faiss'
+
+#Create vector database
+@st.cache_resource
+def create_vector_db():
+    #Instanciate the Directory Loader in order to load the pdf files
+    loader=DirectoryLoader(DATA_PATH, glob='*.pdf', loader_cls=PyPDFLoader)
+    documents=loader.load()
+
+    #Instanciate the Text Splitter in chunks and split the document
+    text_splitter=RecursiveCharacterTextSplitter(chunk_size=500,chunk_overlap=50)
+    texts=text_splitter.split_documents(documents)
+
+    #Instanciate the embedding model
+    embeddings=HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
+                                        model_kwargs={'device':'cpu'})
+    
+    #Create the FAISS db
+    db=FAISS.from_documents(texts, embeddings)
+    db.save_local(DB_FAISS_PATH)
+    db=FAISS.load_local(DB_FAISS_PATH, embeddings)
+
+    return db
+
+
+db=create_vector_db()
 llm=load_llm()
 
 
@@ -80,7 +111,7 @@ with col2:
     
     st.header("Ask to Flint")
 
-    DB_FAISS_PATH = os.path.join(local_path, 'vectorstore_docs/db_faiss')
+    #DB_FAISS_PATH = os.path.join(local_path, 'vectorstore_docs/db_faiss')
 
     custom_prompt_template = """Use the following pieces of information to answer the user's question.
     If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -115,10 +146,10 @@ with col2:
 
     #QA Model Function
     #@st.__cached__
-    def qa_bot(llm):
+    def qa_bot(llm,db):
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
-        db = FAISS.load_local(DB_FAISS_PATH, embeddings)
+        db = db#FAISS.load_local(DB_FAISS_PATH, embeddings)
         llm = llm#load_llm()
         qa_prompt = set_custom_prompt()
         qa = retrieval_qa_chain(llm, qa_prompt, db)
@@ -127,12 +158,12 @@ with col2:
 
 
     #output function
-    def final_result(query,llm):
+    def final_result(query,llm,db):
         #creating vectordb
         #print('Starting create vector db')
         #create_vector_db()
         #print('vector db done!')
-        qa_result = qa_bot(llm)
+        qa_result = qa_bot(llm,db)
         response = qa_result.invoke({'query': query})
         return response
     
