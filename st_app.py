@@ -20,7 +20,7 @@ from plotly import graph_objs as go
 
 local_path=os.getcwd()
 
-@st.cache_resource
+@st.cache
 def load_llm():
         # Load the locally downloaded model here
         llm = CTransformers(
@@ -114,7 +114,7 @@ with col2:
     
 
     #QA Model Function
-    @st.__cached__
+    #@st.__cached__
     def qa_bot(llm):
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
