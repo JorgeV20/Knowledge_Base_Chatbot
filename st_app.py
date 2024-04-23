@@ -145,7 +145,6 @@ with col2:
     
 
     #QA Model Function
-    #@st.__cached__
     def qa_bot(llm,db):
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
@@ -159,20 +158,16 @@ with col2:
 
     #output function
     def final_result(query,llm,db):
-        #creating vectordb
-        #print('Starting create vector db')
-        #create_vector_db()
-        #print('vector db done!')
         qa_result = qa_bot(llm,db)
         response = qa_result.invoke({'query': query})
         return response
     
     
     st.header("Chatbot💁")
-    st.write(DB_FAISS_PATH)
-    filenames = os.listdir(DB_FAISS_PATH)
-    for file in filenames:
-        st.write(file)
+    #st.write(DB_FAISS_PATH)
+    #filenames = os.listdir(DB_FAISS_PATH)
+    #for file in filenames:
+       #st.write(file)
 
     user_question = st.text_input("Ask a Question from Finance", key="user_question")
     if user_question:
