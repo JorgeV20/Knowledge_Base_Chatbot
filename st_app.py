@@ -45,7 +45,7 @@ DB_FAISS_PATH='vectorstore_docs/db_faiss'
 
 #Create vector database
 @st.cache_resource
-def create_vector_db(embeddings):
+def create_vector_db():
     #Instanciate the Directory Loader in order to load the pdf files
     loader=DirectoryLoader(DATA_PATH, glob='*.pdf', loader_cls=PyPDFLoader)
     documents=loader.load()
@@ -55,8 +55,8 @@ def create_vector_db(embeddings):
     texts=text_splitter.split_documents(documents)
 
     #Instanciate the embedding model
-    embeddings=embeddings#HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
-                                        #model_kwargs={'device':'cpu'})
+    embeddings=HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
+                                        model_kwargs={'device':'cpu'})
     
     #Create the FAISS db
     db=FAISS.from_documents(texts, embeddings)
@@ -69,7 +69,7 @@ def create_vector_db(embeddings):
 
 llm=load_llm()
 embeddings=get_embedding_model()
-db=create_vector_db(embeddings)
+db=create_vector_db()
 
 
 st.title('🦜🔗 Flint, your FinanceBot')
