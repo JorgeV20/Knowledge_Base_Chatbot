@@ -34,12 +34,18 @@ def load_llm():
         )
         return llm 
 
+@st.cache_resource
+def get_embedding_model():
+    embeddings=HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
+                                        model_kwargs={'device':'cpu'})
+    return embeddings
+
 DATA_PATH='docs/'
 DB_FAISS_PATH='vectorstore_docs/db_faiss'
 
 #Create vector database
 @st.cache_resource
-def create_vector_db():
+def create_vector_db(embeddings):
     #Instanciate the Directory Loader in order to load the pdf files
     loader=DirectoryLoader(DATA_PATH, glob='*.pdf', loader_cls=PyPDFLoader)
     documents=loader.load()
@@ -49,8 +55,8 @@ def create_vector_db():
     texts=text_splitter.split_documents(documents)
 
     #Instanciate the embedding model
-    embeddings=HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
-                                        model_kwargs={'device':'cpu'})
+    embeddings=embeddings#HuggingFaceBgeEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2',
+                                        #model_kwargs={'device':'cpu'})
     
     #Create the FAISS db
     db=FAISS.from_documents(texts, embeddings)
@@ -60,9 +66,10 @@ def create_vector_db():
     return db
 
 
-db=create_vector_db()
-llm=load_llm()
 
+llm=load_llm()
+embeddings=get_embedding_model()
+db=create_vector_db(embeddings)
 
 
 st.title('🦜🔗 Flint, your FinanceBot')
@@ -145,9 +152,9 @@ with col2:
     
 
     #QA Model Function
-    def qa_bot(llm,db):
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
-                                        model_kwargs={'device': 'cpu'})
+    def qa_bot(llm,db,embeddings):
+        embeddings = embeddings#HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
+                                        #model_kwargs={'device': 'cpu'})
         db = db#FAISS.load_local(DB_FAISS_PATH, embeddings)
         llm = llm#load_llm()
         qa_prompt = set_custom_prompt()
@@ -157,8 +164,8 @@ with col2:
 
 
     #output function
-    def final_result(query,llm,db):
-        qa_result = qa_bot(llm,db)
+    def final_result(query,llm,db,embeddings):
+        qa_result = qa_bot(llm,db,embeddings)
         response = qa_result.invoke({'query': query})
         return response
     
@@ -171,6 +178,6 @@ with col2:
 
     user_question = st.text_input("Ask a Question from Finance", key="user_question")
     if user_question:
-        response=final_result(user_question,llm,db)
+        response=final_result(user_question,llm,db,embeddings)
         st.write("Reply: ", response['result'])
         
