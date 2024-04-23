@@ -66,7 +66,7 @@ with col2:
     
     st.header("Ask to Flint")
 
-    DB_FAISS_PATH = os.path.join(local_path, 'vectorstore_docs/db_faiss')
+    DB_FAISS_PATH = os.path.join(local_path, 'vectorstore/db_faiss')
 
     custom_prompt_template = """Use the following pieces of information to answer the user's question.
     If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -123,7 +123,7 @@ with col2:
     def final_result(query):
         #creating vectordb
         print('Starting create vector db')
-        create_vector_db()
+        #create_vector_db()
         print('vector db done!')
         qa_result = qa_bot()
         response = qa_result.invoke({'query': query})
