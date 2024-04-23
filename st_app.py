@@ -112,6 +112,7 @@ with col2:
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
         db = FAISS.load_local(DB_FAISS_PATH, embeddings)
+        print(db)
         llm = load_llm()
         qa_prompt = set_custom_prompt()
         qa = retrieval_qa_chain(llm, qa_prompt, db)
@@ -123,7 +124,7 @@ with col2:
     def final_result(query):
         #creating vectordb
         print('Starting create vector db')
-        create_vector_db()
+        #create_vector_db()
         print('vector db done!')
         qa_result = qa_bot()
         response = qa_result.invoke({'query': query})
