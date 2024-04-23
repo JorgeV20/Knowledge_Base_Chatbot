@@ -80,47 +80,18 @@ This chatbot is built using the Retrieval-Augmented Generation (RAG) framework
             
 """)
 
-col1, col2 = st.columns(2)
+#col1, col2 = st.columns(2)
 
-with col1:
-    st.header('Stock Forecast App')
-
-    START = "2015-01-01"
-    TODAY = date.today().strftime("%Y-%m-%d")
-    def load_data(ticker):
-        data = yf.download(ticker, START, TODAY)
-        data.reset_index(inplace=True)
-        return data
-    data = load_data('AAPL')
-    st.subheader('Raw data')
-    st.write(data.tail())
-
-    df_train = data[['Date','Close']]
-    df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
-
-    m=Prophet()
-    m.fit(df_train)
-
-    future = m.make_future_dataframe(periods=365)
-    forecast = m.predict(future)
-    st.subheader('Forecast data')
-    st.write(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
-
-    st.write(f'Forecast plot for 1 year')
-    #fig1 = plot_plotly(m, forecast)
-    #fig1 = m.plot(forecast)
-    #st.plotly_chart(fig1)
-
-
-
-
-with col2:
+#with col1:
     
-    st.header("Ask to Flint")
+
+#with col2:
+    
+st.header("Ask to Flint")
 
     #DB_FAISS_PATH = os.path.join(local_path, 'vectorstore_docs/db_faiss')
 
-    custom_prompt_template = """Use the following pieces of information to answer the user's question.
+custom_prompt_template = """Use the following pieces of information to answer the user's question.
     If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
     Context: {context}
@@ -130,7 +101,7 @@ with col2:
     Helpful answer:
     """
 
-    def set_custom_prompt():
+def set_custom_prompt():
         """
         Prompt template for QA retrieval for each vectorstore
         """
@@ -139,7 +110,7 @@ with col2:
         return prompt
 
     #Retrieval QA Chain
-    def retrieval_qa_chain(llm, prompt, db):
+def retrieval_qa_chain(llm, prompt, db):
         qa_chain = RetrievalQA.from_chain_type(llm=llm,
                                         chain_type='stuff',
                                         retriever=db.as_retriever(search_kwargs={'k': 2}),
@@ -152,7 +123,7 @@ with col2:
     
 
     #QA Model Function
-    def qa_bot(llm,db,embeddings):
+def qa_bot(llm,db,embeddings):
         embeddings = embeddings#HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         #model_kwargs={'device': 'cpu'})
         db = db#FAISS.load_local(DB_FAISS_PATH, embeddings)
@@ -164,32 +135,47 @@ with col2:
 
 
     #output function
-    def final_result(query,llm,db,embeddings):
+def final_result(query,llm,db,embeddings):
         qa_result = qa_bot(llm,db,embeddings)
         response = qa_result.invoke({'query': query})
         return response
     
     
-    st.header("Chatbot💁")
+st.header("Chatbot💁")
     #st.write(DB_FAISS_PATH)
     #filenames = os.listdir(DB_FAISS_PATH)
     #for file in filenames:
        #st.write(file)
 
-    user_question = st.text_input("Ask a Question from Finance", key="user_question")
-    if user_question:
+user_question = st.text_input("Ask a Question from Finance", key="user_question")
+if user_question:
         response=final_result(user_question,llm,db,embeddings)
         st.write("Reply: ", response['result'])
-    
-    with st.sidebar:
-        st.header("Chatbot💁")
-    #st.write(DB_FAISS_PATH)
-    #filenames = os.listdir(DB_FAISS_PATH)
-    #for file in filenames:
-       #st.write(file)
 
-    user_question = st.text_input("Ask a Question from Finance", key="user_question")
-    if user_question:
-        response=final_result(user_question,llm,db,embeddings)
-        st.write("Reply: ", response['result'])
-        
+st.header('Stock Forecast App')
+
+START = "2015-01-01"
+TODAY = date.today().strftime("%Y-%m-%d")
+def load_data(ticker):
+    data = yf.download(ticker, START, TODAY)
+    data.reset_index(inplace=True)
+    return data
+data = load_data('AAPL')
+st.subheader('Raw data')
+st.write(data.tail())
+
+df_train = data[['Date','Close']]
+df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
+
+m=Prophet()
+m.fit(df_train)
+
+future = m.make_future_dataframe(periods=365)
+forecast = m.predict(future)
+st.subheader('Forecast data')
+st.write(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
+
+st.write(f'Forecast plot for 1 year')
+    #fig1 = plot_plotly(m, forecast)
+    #fig1 = m.plot(forecast)
+    #st.plotly_chart(fig1)
