@@ -171,6 +171,6 @@ with col2:
 
     user_question = st.text_input("Ask a Question from Finance", key="user_question")
     if user_question:
-        response=final_result(user_question,llm)
+        response=final_result(user_question,llm,db)
         st.write("Reply: ", response['result'])
         
