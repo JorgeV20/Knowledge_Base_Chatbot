@@ -19,9 +19,6 @@ from datetime import date
 from plotly import graph_objs as go
 
 local_path=os.getcwd()
-print('Starting create vector db')
-create_vector_db()
-print('vector db done!')
 
 st.title('🦜🔗 Flint, your FinanceBot')
 st.markdown("""
@@ -61,6 +58,13 @@ with col1:
     #fig1 = plot_plotly(m, forecast)
     #fig1 = m.plot(forecast)
     #st.plotly_chart(fig1)
+    class db():
+        print('Starting create vector db')
+        create_vector_db()
+        print('vector db done!')
+
+    db()
+
 
 
 
