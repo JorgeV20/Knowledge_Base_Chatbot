@@ -109,11 +109,6 @@ with col2:
 
     #QA Model Function
     def qa_bot():
-        #creating vectordb
-        print('Starting create vector db')
-        create_vector_db()
-        print('vector db done!')
-
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
         db = FAISS.load_local(DB_FAISS_PATH, embeddings)
@@ -126,6 +121,10 @@ with col2:
 
     #output function
     def final_result(query):
+        #creating vectordb
+        print('Starting create vector db')
+        create_vector_db()
+        print('vector db done!')
         qa_result = qa_bot()
         response = qa_result.invoke({'query': query})
         return response
