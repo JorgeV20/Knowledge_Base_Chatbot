@@ -20,6 +20,20 @@ from plotly import graph_objs as go
 
 local_path=os.getcwd()
 
+@st.cache_resource
+def load_llm():
+        # Load the locally downloaded model here
+        llm = CTransformers(
+            model = "TheBloke/Llama-2-7B-Chat-GGML",
+            model_type="llama",
+            max_new_tokens = 512,
+            temperature = 0.5
+        )
+        return llm    
+llm=load_llm()
+
+
+
 st.title('🦜🔗 Flint, your FinanceBot')
 st.markdown("""
 ## Finance Bot: Get instant insights from Finance
@@ -97,24 +111,15 @@ with col2:
         return qa_chain
 
     #Loading the model
-    @st.cache_resource
-    def load_llm():
-        # Load the locally downloaded model here
-        llm = CTransformers(
-            model = "TheBloke/Llama-2-7B-Chat-GGML",
-            model_type="llama",
-            max_new_tokens = 512,
-            temperature = 0.5
-        )
-        return llm
+    
 
     #QA Model Function
-    @st.cache_resource
-    def qa_bot():
+    @st.__cached__
+    def qa_bot(llm):
         embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
                                         model_kwargs={'device': 'cpu'})
         db = FAISS.load_local(DB_FAISS_PATH, embeddings)
-        llm = load_llm()
+        llm = llm#load_llm()
         qa_prompt = set_custom_prompt()
         qa = retrieval_qa_chain(llm, qa_prompt, db)
 
@@ -122,12 +127,12 @@ with col2:
 
 
     #output function
-    def final_result(query):
+    def final_result(query,llm):
         #creating vectordb
         #print('Starting create vector db')
         #create_vector_db()
         #print('vector db done!')
-        qa_result = qa_bot()
+        qa_result = qa_bot(llm)
         response = qa_result.invoke({'query': query})
         return response
     
@@ -140,6 +145,6 @@ with col2:
 
     user_question = st.text_input("Ask a Question from Finance", key="user_question")
     if user_question:
-        response=final_result(user_question)
+        response=final_result(user_question,llm)
         st.write("Reply: ", response['result'])
         
