@@ -2,3 +2,5 @@
 __pycache__/
 __pycache__/*.pyc
 __pycache__/model.cpython-39.pyc
+
+v1_requirements.txt

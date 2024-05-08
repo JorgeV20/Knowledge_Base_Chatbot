@@ -61,7 +61,7 @@ def create_vector_db():
     #Create the FAISS db
     db=FAISS.from_documents(texts, embeddings)
     db.save_local(DB_FAISS_PATH)
-    db=FAISS.load_local(DB_FAISS_PATH, embeddings)
+    db=FAISS.load_local(DB_FAISS_PATH, embeddings, allow_dangerous_deserialization=True)
 
     return db
 
@@ -69,7 +69,8 @@ def create_vector_db():
 
 llm=load_llm()
 embeddings=get_embedding_model()
-db=create_vector_db()
+#db=create_vector_db()
+db=FAISS.load_local(DB_FAISS_PATH, embeddings, allow_dangerous_deserialization=True)
 
 
 st.title('🦜🔗 Flint, your FinanceBot')
