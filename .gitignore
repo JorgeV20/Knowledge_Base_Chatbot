@@ -7,5 +7,6 @@ stocks/
 vectorstore/
 vectorstore_docs/
 v1_requirements.txt
+.env
 
 st_app_openai.py
