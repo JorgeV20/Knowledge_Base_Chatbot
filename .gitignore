@@ -9,6 +9,8 @@ vectorstore_docs/
 v1_requirements.txt
 .env
 
+models/
+
 st_app_openai.py
 get_massive_data.py
 st_app_v1.py
