@@ -1,54 +1,68 @@
+# model.py
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.prompts import PromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_community.llms import CTransformers
-from langchain.chains import RetrievalQA
+from langchain_community.llms import LlamaCpp
 
 DB_FAISS_PATH = 'vectorstore/db_faiss'
+MODEL_PATH = "./models/Qwen/Qwen2.5-3B-Instruct-GGUF/qwen2.5-3b-instruct-q4_k_m.gguf"
 
-custom_prompt_template = """Use the following pieces of information to answer the user's question.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
+custom_prompt_template = """<|im_start|>system
+You are a professional financial analyst RAG bot. Use the provided context documents and live market data to answer the user's question accurately. If you don't know the answer, say you don't know. Keep your answer concise and accurate.
+<|im_end|>
+<|im_start|>user
+Context Documents:
+{context}
 
-Context: {context}
+Live Market Data:
+{live_market_data}
+
 Question: {question}
-
-Only return the helpful answer below and nothing else. Try to make it short. Maximum of 500 words.
-Helpful answer:
+<|im_end|>
+<|im_start|>assistant
 """
 
 def set_custom_prompt():
-    return PromptTemplate(template=custom_prompt_template, input_variables=['context', 'question'])
-
-def retrieval_qa_chain(llm, prompt, db):
-    return RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type='stuff',
-        retriever=db.as_retriever(search_kwargs={'k': 2}),
-        return_source_documents=True,
-        chain_type_kwargs={'prompt': prompt}
+    return PromptTemplate(
+        template=custom_prompt_template, 
+        input_variables=['context', 'question', 'live_market_data']
     )
 
 def load_llm():
-    return CTransformers(
-        model="TheBloke/Llama-2-7B-Chat-GGML",
-        model_type="llama",
-        max_new_tokens=512,
-        temperature=0.5
+    # LlamaCpp allows native integration with LangChain pipeline
+    return LlamaCpp(
+        model_path=MODEL_PATH,
+        n_ctx=4096,
+        n_batch=512,
+        n_gpu_layers=-1,
+        temperature=0.3,
+        max_tokens=2048,
+        verbose=False
     )
 
-print("Initializing RAG Models... Please wait (this happens once).")
+
+print("Initializing Qwen 2.5 RAG Pipeline on GPU... Please wait.")
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={'device': 'cpu'})
 db = FAISS.load_local(DB_FAISS_PATH, embeddings, allow_dangerous_deserialization=True)
+
+retriever = db.as_retriever(search_kwargs={'k': 3}) 
 llm = load_llm()
-qa_prompt = set_custom_prompt()
+prompt_template = set_custom_prompt()
+print("Qwen 2.5 GPU Pipeline fully ready!")
 
-# This is our persistent global chain instance
-QA_BOT_INSTANCE = retrieval_qa_chain(llm, qa_prompt, db)
-print("RAG Pipeline ready!")
-# -------------------------------------------------------------
-
-def final_result(query):
-    # Simply invoke the pre-loaded global chain instantly
-    response = QA_BOT_INSTANCE.invoke({'query': query})
-    return response
+def final_result(user_query, live_data_str):
+    print("Answer method")
+    docs = retriever.invoke(user_query)
+    context_chunks = "\n\n".join([doc.page_content for doc in docs])
+    
+    formatted_prompt = prompt_template.format(
+        context=context_chunks,
+        live_market_data=live_data_str,
+        question=user_query
+    )
+    print(formatted_prompt)
+    
+    answer = llm.invoke(formatted_prompt)
+    
+    return {'result': answer}
