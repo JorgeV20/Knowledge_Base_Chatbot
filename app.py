@@ -24,11 +24,13 @@ def predict():
     
     if detected_ticker:
         try:
+            print(f"Fetching {detected_ticker} data")
             stock = yf.Ticker(detected_ticker)
             price = stock.fast_info['lastPrice']
             volume = stock.fast_info['threeMonthAverageVolume']
             
             live_data_str = f"Current trading price for {detected_ticker} is ${price:.2f}. 3-Month Average Volume is {volume:,.0f}."
+            print(live_data_str)
         except Exception as e:
             print(f"Failed to fetch yfinance data: {e}")
             live_data_str = "Real-time data source temporarily unavailable."
