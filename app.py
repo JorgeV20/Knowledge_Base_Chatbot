@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import yfinance as yf
 from model import final_result
+from get_news import fetch_news
 
 app=Flask(__name__)
 
@@ -35,6 +36,9 @@ def predict():
             print(f"Failed to fetch yfinance data: {e}")
             live_data_str = "Real-time data source temporarily unavailable."
 
+    print("getting articles")
+    articles = fetch_news(detected_ticker)
+    print(articles)
     response = final_result(user_text, live_data_str)
     
     answer = response['result']
