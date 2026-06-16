@@ -5,7 +5,7 @@ from get_news import fetch_news
 
 app=Flask(__name__)
 
-COMPANIES = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]
+COMPANIES = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "^GSPC", "GC=F"]
 
 @app.get('/')
 def index_get():
