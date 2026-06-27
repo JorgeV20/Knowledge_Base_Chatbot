@@ -7,6 +7,8 @@ def fetch_news(topic):
 
     url = f"https://newsapi.org/v2/everything?q={topic}&sortBy=publishedAt&pageSize=3&apiKey={API_KEY}"
     
+    articles_headlines = []
+
     try:
         response = requests.get(url)
         data = response.json()
@@ -17,10 +19,13 @@ def fetch_news(topic):
             
             for i, article in enumerate(articles, 1):
                 print(f"Headline {i}: {article['title']}")
+                print(f"Link to headline {i}: {article['url']}, published {article['publishedAt']}")
+                articles_headlines.append(f"Headline {i}: {article['title']}")
+
         else:
             print(f"I couldn't find any recent news about {topic}.")
             
     except Exception as e:
         print("Sorry, I had trouble connecting to the news service.")
     
-    return articles
+    return articles_headlines
