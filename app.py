@@ -39,7 +39,7 @@ def predict():
     print("getting articles")
     articles = fetch_news(detected_ticker)
     print(articles)
-    response = final_result(user_text, live_data_str)
+    response = final_result(user_text, live_data_str, articles)
     
     answer = response['result']
     return jsonify({'answer': answer})
