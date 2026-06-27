@@ -18,6 +18,9 @@ Context Documents:
 Live Market Data:
 {live_market_data}
 
+News related to market data:
+{articles}
+
 Question: {question}
 <|im_end|>
 <|im_start|>assistant
@@ -26,7 +29,7 @@ Question: {question}
 def set_custom_prompt():
     return PromptTemplate(
         template=custom_prompt_template, 
-        input_variables=['context', 'question', 'live_market_data']
+        input_variables=['context', 'question', 'live_market_data', 'articles']
     )
 
 def load_llm():
@@ -51,7 +54,7 @@ llm = load_llm()
 prompt_template = set_custom_prompt()
 print("Qwen 2.5 GPU Pipeline fully ready!")
 
-def final_result(user_query, live_data_str):
+def final_result(user_query, live_data_str, articles):
     print("Answer method")
     docs = retriever.invoke(user_query)
     context_chunks = "\n\n".join([doc.page_content for doc in docs])
@@ -59,7 +62,9 @@ def final_result(user_query, live_data_str):
     formatted_prompt = prompt_template.format(
         context=context_chunks,
         live_market_data=live_data_str,
-        question=user_query
+        question=user_query,
+        articles=articles
+
     )
     print(formatted_prompt)
     
