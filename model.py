@@ -28,7 +28,7 @@ Question: {question}
 
 def set_custom_prompt():
     return PromptTemplate(
-        template=custom_prompt_template, 
+        template=custom_prompt_template,
         input_variables=['context', 'question', 'live_market_data', 'articles']
     )
 
