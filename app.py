@@ -5,7 +5,17 @@ from get_news import fetch_news
 
 app=Flask(__name__)
 
-COMPANIES = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "^GSPC", "GC=F"]
+COMPANY_MAP = {
+    "apple": "AAPL",
+    "microsoft": "MSFT",
+    "google": "GOOGL",
+    "alphabet": "GOOGL",
+    "amazon": "AMZN",
+    "tesla": "TSLA",
+    "nvidia": "NVDA",
+    "meta": "META",
+    "facebook": "META"
+}
 
 @app.get('/')
 def index_get():
@@ -14,10 +24,11 @@ def index_get():
 @app.post('/predict')
 def predict():
     user_text = request.get_json().get('message')
+    user_text_lower = user_text.lower()
     
     detected_ticker = None
-    for ticker in COMPANIES:
-        if ticker.lower() in user_text.lower():
+    for company_name, ticker in COMPANY_MAP.items():
+        if company_name in user_text_lower:
             detected_ticker = ticker
             break
             
@@ -37,7 +48,8 @@ def predict():
             live_data_str = "Real-time data source temporarily unavailable."
 
     print("getting articles")
-    articles = fetch_news(detected_ticker)
+    stock_news=f"{company_name} finance"
+    articles = fetch_news(stock_news)
     print(articles)
     response = final_result(user_text, live_data_str, articles)
     
