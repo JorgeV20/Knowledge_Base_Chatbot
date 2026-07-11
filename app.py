@@ -19,6 +19,8 @@ COMPANY_MAP = {
 
 # Global variable to store the conversation log
 conversation_history_text = ""
+last_detected_ticker = None
+last_detected_name = None
 
 @app.get('/')
 def index_get():
@@ -26,7 +28,7 @@ def index_get():
 
 @app.post('/predict')
 def predict():
-    global conversation_history_text
+    global conversation_history_text, last_detected_ticker, last_detected_name
     user_text = request.get_json().get('message')
     user_text_lower = user_text.lower()
     
@@ -38,7 +40,14 @@ def predict():
             detected_ticker = ticker
             detected_name = company_name
             break
-            
+
+    if not detected_ticker and last_detected_ticker:
+        detected_ticker = last_detected_ticker
+        detected_name = last_detected_name
+    elif detected_ticker:
+        last_detected_ticker = detected_ticker
+        last_detected_name = detected_name
+      
     live_data_str = "No real-time market data requested or available for this query."
     articles = []
 
@@ -51,14 +60,16 @@ def predict():
             
             live_data_str = f"Current trading price for {detected_ticker} is ${price:.2f}. 3-Month Average Volume is {volume:,.0f}."
             print(live_data_str)
+            
         except Exception as e:
             print(f"Failed to fetch yfinance data: {e}")
             live_data_str = "Real-time data source temporarily unavailable."
 
-    print("getting articles")
-    stock_news=f"{detected_name} finance"
-    articles = fetch_news(stock_news)
-    print(articles)
+        print("getting articles")
+        stock_news=f"{detected_name} finance"
+        articles = fetch_news(stock_news)
+        print(articles)
+    
     response = final_result(user_text, live_data_str, articles, conversation_history_text)
     
     answer = response['result']
