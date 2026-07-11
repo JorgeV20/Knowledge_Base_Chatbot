@@ -17,23 +17,31 @@ COMPANY_MAP = {
     "facebook": "META"
 }
 
+# Global variable to store the conversation log
+conversation_history_text = ""
+
 @app.get('/')
 def index_get():
     return render_template('index.html')
 
 @app.post('/predict')
 def predict():
+    global conversation_history_text
     user_text = request.get_json().get('message')
     user_text_lower = user_text.lower()
     
     detected_ticker = None
+    detected_name = None
+
     for company_name, ticker in COMPANY_MAP.items():
         if company_name in user_text_lower:
             detected_ticker = ticker
+            detected_name = company_name
             break
             
     live_data_str = "No real-time market data requested or available for this query."
-    
+    articles = []
+
     if detected_ticker:
         try:
             print(f"Fetching {detected_ticker} data")
@@ -48,12 +56,14 @@ def predict():
             live_data_str = "Real-time data source temporarily unavailable."
 
     print("getting articles")
-    stock_news=f"{company_name} finance"
+    stock_news=f"{detected_name} finance"
     articles = fetch_news(stock_news)
     print(articles)
-    response = final_result(user_text, live_data_str, articles)
+    response = final_result(user_text, live_data_str, articles, conversation_history_text)
     
     answer = response['result']
+
+    conversation_history_text += f"User: {user_text}\nAssistant: {answer}\n\n"
     return jsonify({'answer': answer})
 
 if __name__=='__main__':
