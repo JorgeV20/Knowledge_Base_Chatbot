@@ -21,7 +21,7 @@ Context Documents:
 Live Market Data:
 {live_market_data}
 
-News related to market data:
+News related to the company:
 {articles}
 
 Question: {question}
