@@ -5,7 +5,7 @@ def fetch_news(topic):
     # Replace with API_KEY from NEWSAPI.ORG
     API_KEY = os.getenv("NEWS_API_KEY")
 
-    url = f"https://newsapi.org/v2/everything?q={topic}&sortBy=publishedAt&pageSize=3&apiKey={API_KEY}"
+    url = f"https://newsapi.org/v2/everything?q={topic}&sortBy=publishedAt&pageSize=3&language=en&apiKey={API_KEY}"
     
     articles_headlines = []
 
