@@ -12,6 +12,9 @@ custom_prompt_template = """<|im_start|>system
 You are a professional financial analyst RAG bot. Use the provided context documents and live market data to answer the user's question accurately. If you don't know the answer, say you don't know. Keep your answer concise and accurate.
 <|im_end|>
 <|im_start|>user
+Conversation History:
+{chat_history}
+
 Context Documents:
 {context}
 
@@ -29,7 +32,7 @@ Question: {question}
 def set_custom_prompt():
     return PromptTemplate(
         template=custom_prompt_template,
-        input_variables=['context', 'question', 'live_market_data', 'articles']
+        input_variables=['chat_history','context', 'question', 'live_market_data', 'articles']
     )
 
 def load_llm():
@@ -54,12 +57,13 @@ llm = load_llm()
 prompt_template = set_custom_prompt()
 print("Qwen 2.5 GPU Pipeline fully ready!")
 
-def final_result(user_query, live_data_str, articles):
+def final_result(user_query, live_data_str, articles, chat_history):
     print("Answer method")
     docs = retriever.invoke(user_query)
     context_chunks = "\n\n".join([doc.page_content for doc in docs])
     
     formatted_prompt = prompt_template.format(
+        chat_history=chat_history,
         context=context_chunks,
         live_market_data=live_data_str,
         question=user_query,
