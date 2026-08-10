@@ -1,8 +1,8 @@
 # Knowledge Base Chatbot
 
-FinanceBot Knowledge Base Chatbot is a tool designed to provide instant access to financial information and expertise. Leveraging state-of-the-art natural language processing (NLP) algorithms, FinanceBot extracts valuable insights and knowledge from a comprehensive finance PDF resource, transforming it into an interactive chatbot experience. FinanceBot was built using Llama2 - 7B, Langchain, FAISS, and Flask as foundational technologies.
+FinanceBot Knowledge Base Chatbot is a tool designed to provide instant access to financial information and expertise. It has access to real-time stock market data and financial news. It extracts valuable insights and knowledge from a comprehensive finance PDF resource, transforming it into an interactive chatbot experience. FinanceBot was built using Qwen2.5-3B-Instruct, Langchain, FAISS, and Flask as foundational technologies.
 
-![FinanceBot](./FinanceBot.jpg)
+![FinanceBot](./static/images/finance_chatbot.png)
 
 ## Repository Structure
 - [`README.md`](README.md): The file contais the description of the project.
@@ -20,7 +20,10 @@ The pdf sources are:
 - The Alchemy of Finance, Reading the Mind of the Market
 - The Nature of Investing
 
+The API sources are:
+- [NewsAPI](newsapi.org)
+- [Yahoo Finance](https://finance.yahoo.com/)
+
 ## Future work
-- Add features such a pdf loader.
 - Increase the speed of answer.
 - Increase the number of sources.
