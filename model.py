@@ -10,6 +10,10 @@ MODEL_PATH = "./models/Qwen/Qwen2.5-3B-Instruct-GGUF/qwen2.5-3b-instruct-q4_k_m.
 
 custom_prompt_template = """<|im_start|>system
 You are a professional financial analyst RAG bot. Use the provided context documents and live market data to answer the user's question accurately. If you don't know the answer, say you don't know. Keep your answer concise and accurate.
+CRITICAL INSTRUCTIONS:
+1. When summarizing news for multiple companies, group your response clearly by company using headers (e.g., "### Google", "### Apple").
+2. Answer the user's question first without embedding raw links in your main text.
+3. NEGATIVE CONSTRAINT: Do NOT include a "Sources" section and do NOT list any news article links UNLESS the user explicitly asks for "sources" or "news" in their question. If the question does not ask for news, ignore the {articles} context entirely.
 <|im_end|>
 <|im_start|>user
 Conversation History:
